@@ -10,7 +10,7 @@ export default function AttackStage() {
   return (
     <div className="space-y-6">
       <StageHeader
-        eyebrow="Act 4 — Your turn"
+        eyebrow="Act 3 — Your turn"
         title="The Attack Lab"
         blurb="This merchant review is live evidence. Rewrite it. Hide an instruction in it. Try to talk the agent out of its rules — then watch which agent breaks."
       />

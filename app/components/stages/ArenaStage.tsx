@@ -17,7 +17,7 @@ export default function ArenaStage() {
   return (
     <div className="space-y-6">
       <StageHeader
-        eyebrow="Act 3 — The experiment"
+        eyebrow="Act 2 — The experiment"
         title="The Arena"
         blurb="Two agents, one marketplace, one hidden attack. Watch what each of them does with content it was never supposed to trust."
       />
