@@ -82,16 +82,33 @@ Key modules:
 
 ## Screenshots
 
+### 🏁 Agent Arena
 
-## The Arena ![Arena — naïve vs guarded race](docs/screenshots/arena.png) |
-## The Attack Lab  ![Attack Lab — edit a review, rerun](docs/screenshots/attack-lab.png) |
-## The Verdict  ![Verdict — autonomy score & approval gate](docs/screenshots/verdict.png) |
+The guarded agent and naïve agent race side-by-side against the same marketplace.
 
-| --- |
-| --- |
-| --- |
+<p align="center">
+  <img src="docs/screenshots/arena.png" width="100%" alt="Agent Arena">
+</p>
 
+---
 
+### ⚠️ Live Attack Lab
+
+Inject prompt-injection attacks into merchant content and observe how each agent responds.
+
+<p align="center">
+  <img src="docs/screenshots/attack-lab.png" width="100%" alt="Attack Lab">
+</p>
+
+---
+
+### ✅ Verdict
+
+A deterministic evaluation of intent fidelity, autonomy score, and approval gating.
+
+<p align="center">
+  <img src="docs/screenshots/verdict.png" width="100%" alt="Verdict">
+</p>
 ## Scenarios
 
 Two selectable scenarios; the Arena always replays the flagship injection race.
