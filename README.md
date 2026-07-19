@@ -83,9 +83,9 @@ Key modules:
 ## Screenshots
 
 
-| The Arena | ![Arena — naïve vs guarded race](docs/screenshots/arena.png) |
-| The Attack Lab | ![Attack Lab — edit a review, rerun](docs/screenshots/attack-lab.png) |
-| The Verdict | ![Verdict — autonomy score & approval gate](docs/screenshots/verdict.png) |
+## The Arena ![Arena — naïve vs guarded race](docs/screenshots/arena.png) |
+## The Attack Lab  ![Attack Lab — edit a review, rerun](docs/screenshots/attack-lab.png) |
+## The Verdict  ![Verdict — autonomy score & approval gate](docs/screenshots/verdict.png) |
 
 | --- |
 | --- |
