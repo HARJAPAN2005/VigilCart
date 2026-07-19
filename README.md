@@ -2,7 +2,7 @@
 
 **Before an AI shopping agent spends your money, VigilCart proves whether it actually kept your promises — in a fully simulated, no-payment lab.**
 
-> Live demo: **`https://<your-vercel-app>.vercel.app`** _(replace after deployment — see [Deployment](#deployment))_
+> Live demo: **`https://vigil-cart.vercel.app`** 
 
 ---
 
