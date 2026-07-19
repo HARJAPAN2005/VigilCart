@@ -82,11 +82,15 @@ Key modules:
 
 ## Screenshots
 
-_Placeholder images — capture from the running app and drop into `docs/screenshots/`._
 
-| The Arena | The Attack Lab | The Verdict |
-| --- | --- | --- |
-| ![Arena — naïve vs guarded race](docs/screenshots/arena.png) | ![Attack Lab — edit a review, rerun](docs/screenshots/attack-lab.png) | ![Verdict — autonomy score & approval gate](docs/screenshots/verdict.png) |
+| The Arena | ![Arena — naïve vs guarded race](docs/screenshots/arena.png) |
+| The Attack Lab | ![Attack Lab — edit a review, rerun](docs/screenshots/attack-lab.png) |
+| The Verdict | ![Verdict — autonomy score & approval gate](docs/screenshots/verdict.png) |
+
+| --- |
+| --- |
+| --- |
+
 
 ## Scenarios
 
