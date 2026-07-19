@@ -1,0 +1,32 @@
+{
+  "name": "vigilcart",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Adversarial evaluation lab for AI shopping agents.",
+  "scripts": {
+    "dev": "next dev",
+    "lint": "node scripts/verify-project.mjs && eslint .",
+    "build": "node scripts/verify-project.mjs && next build"
+  },
+  "dependencies": {
+    "@google/genai": "^2.12.0",
+    "@tailwindcss/postcss": "^4.3.3",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.25.0",
+    "motion": "^12.42.2",
+    "next": "^16.2.10",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "tailwind-merge": "^3.6.0",
+    "tailwindcss": "^4.3.3",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.2.10",
+    "typescript": "^6.0.3"
+  }
+}

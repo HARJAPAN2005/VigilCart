@@ -1,0 +1,9 @@
+node_modules/
+.next/
+.npm-cache/
+*.tsbuildinfo
+
+# Environment secrets — never commit .env.local or .env
+.env
+.env.local
+.env.*.local

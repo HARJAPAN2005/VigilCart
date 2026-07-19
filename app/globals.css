@@ -1,0 +1,362 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════
+   VigilCart — "Trust Under Pressure"
+   A premium investigative instrument. Warm graphite canvas;
+   color is always semantic: mint = proven, gold = uncertainty,
+   vermilion = compromised, steel = untrusted, one electric
+   blue reserved for live telemetry.
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+  color-scheme: dark;
+
+  /* Canvas — warm near-black ink, layered charcoal surfaces */
+  --vc-bg-root:      #0d0c0a;
+  --vc-bg-panel:     #131210;
+  --vc-bg-card:      #191713;
+  --vc-bg-elevated:  #201d18;
+  --vc-bg-hover:     #1b1915;
+  --vc-bg-modal:     #100f0d;
+
+  /* Hairlines — warm neutral */
+  --vc-border:       rgba(203, 191, 166, 0.14);
+  --vc-border-dim:   rgba(203, 191, 166, 0.07);
+
+  /* Text — warm white, never pure */
+  --vc-text:         #ece8de;
+  --vc-text-muted:   #a49e8f;
+  --vc-text-dim:     #6d675b;
+
+  /* Proven / safe — electric mineral mint */
+  --vc-green:        #3fe3a0;
+  --vc-green-bg:     rgba(63, 227, 160, 0.07);
+  --vc-green-border: rgba(63, 227, 160, 0.22);
+
+  /* Live telemetry only — subtle electric blue */
+  --vc-cyan:         #5fa8ff;
+  --vc-cyan-bg:      rgba(95, 168, 255, 0.07);
+  --vc-cyan-border:  rgba(95, 168, 255, 0.22);
+
+  /* Uncertainty — high-contrast gold */
+  --vc-amber:        #f0b644;
+  --vc-amber-bg:     rgba(240, 182, 68, 0.08);
+  --vc-amber-border: rgba(240, 182, 68, 0.24);
+
+  /* Unsafe / compromised — restrained vermilion */
+  --vc-red:          #f06a50;
+  --vc-red-bg:       rgba(240, 106, 80, 0.08);
+  --vc-red-border:   rgba(240, 106, 80, 0.24);
+
+  /* Untrusted data — muted steel */
+  --vc-slate:        #8b8fa0;
+  --vc-slate-bg:     rgba(139, 143, 160, 0.08);
+  --vc-slate-border: rgba(139, 143, 160, 0.24);
+
+  /* Focus ring */
+  --vc-focus:        rgba(63, 227, 160, 0.5);
+
+  /* Radii */
+  --vc-radius:       8px;
+  --vc-radius-sm:    5px;
+  --vc-radius-lg:    14px;
+
+  /* Depth — soft, dark, neutral. Never colored glow. */
+  --vc-shadow-panel: 0 1px 0 rgba(255, 252, 245, 0.025) inset, 0 12px 32px rgba(0, 0, 0, 0.4);
+  --vc-shadow-lift:  0 1px 0 rgba(255, 252, 245, 0.03) inset, 0 28px 70px rgba(0, 0, 0, 0.55);
+  --vc-shadow-modal: -24px 0 70px rgba(0, 0, 0, 0.55);
+  --vc-shadow-glow:  0 0 0 1px rgba(63, 227, 160, 0.16);
+}
+
+/* ── Tailwind v4 theme mapping (inline keeps utilities pointed
+      at the runtime variables above) ─────────────────────────── */
+
+@theme inline {
+  --color-root:      var(--vc-bg-root);
+  --color-panel:     var(--vc-bg-panel);
+  --color-card:      var(--vc-bg-card);
+  --color-elevated:  var(--vc-bg-elevated);
+  --color-hover:     var(--vc-bg-hover);
+  --color-modal:     var(--vc-bg-modal);
+
+  --color-fg:        var(--vc-text);
+  --color-muted:     var(--vc-text-muted);
+  --color-dim:       var(--vc-text-dim);
+
+  --color-accent:    var(--vc-green);
+  --color-accent-2:  var(--vc-cyan);
+  --color-warn:      var(--vc-amber);
+  --color-danger:    var(--vc-red);
+  --color-neutral:   var(--vc-slate);
+
+  --color-subtle:    var(--vc-border);
+  --color-faint:     var(--vc-border-dim);
+
+  --radius-card:     var(--vc-radius);
+  --radius-card-sm:  var(--vc-radius-sm);
+  --radius-card-lg:  var(--vc-radius-lg);
+
+  --shadow-panel:    var(--vc-shadow-panel);
+  --shadow-lift:     var(--vc-shadow-lift);
+  --shadow-modal:    var(--vc-shadow-modal);
+  --shadow-glow:     var(--vc-shadow-glow);
+
+  --font-sans:       var(--font-inter), system-ui, -apple-system, sans-serif;
+  --font-display:    var(--font-bricolage), var(--font-inter), system-ui, sans-serif;
+  --font-mono:       var(--font-jetbrains), 'Menlo', 'Consolas', monospace;
+}
+
+/* ── Base ────────────────────────────────────────────────── */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--vc-bg-root);
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  color: var(--vc-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Mono is reserved for evidence, timestamps, and technical signatures. */
+.font-mono {
+  font-family: var(--font-jetbrains), 'Menlo', 'Consolas', monospace;
+}
+
+.font-display {
+  font-family: var(--font-bricolage), var(--font-inter), system-ui, sans-serif;
+}
+
+::selection {
+  background: rgba(63, 227, 160, 0.22);
+}
+
+.vc-focusable:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--vc-bg-root), 0 0 0 4px var(--vc-focus);
+  border-radius: var(--vc-radius-sm);
+}
+
+details > summary {
+  cursor: pointer;
+  list-style: none;
+}
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* ── Scrollbar ───────────────────────────────────────────── */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(203, 191, 166, 0.16);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(203, 191, 166, 0.3);
+}
+
+/* ── Motion vocabulary ───────────────────────────────────── */
+
+@keyframes vc-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes vc-slide-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes vc-modal-in {
+  from { opacity: 0; transform: scale(0.97) translateY(10px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes vc-backdrop-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Hero: the intent phrase under interference — a slow sweep of
+   disruption that never wins. */
+@keyframes vc-disrupt-sweep {
+  0%, 100% { transform: translateX(-110%); }
+  46%      { transform: translateX(-110%); }
+  60%      { transform: translateX(110%); }
+  61%      { transform: translateX(110%); }
+}
+
+@keyframes vc-disrupt-jitter {
+  0%, 91%, 100% { transform: none; }
+  92% { transform: translateX(-1px) skewX(-1.2deg); }
+  94% { transform: translateX(1.5px) skewX(0.8deg); }
+  96% { transform: translateX(-0.5px); }
+}
+
+/* Decision thread: a pulse travelling the intent line. */
+@keyframes vc-thread-flow {
+  from { stroke-dashoffset: 0; }
+  to   { stroke-dashoffset: -200; }
+}
+
+@keyframes vc-thread-breathe {
+  0%, 100% { opacity: 0.25; }
+  50%      { opacity: 0.7; }
+}
+
+/* Policy lock: the contract seals. */
+@keyframes vc-lock-seal {
+  0%   { transform: scale(0.6); opacity: 0; }
+  60%  { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes vc-lock-ring {
+  from { box-shadow: 0 0 0 0 rgba(63, 227, 160, 0.35); }
+  to   { box-shadow: 0 0 0 14px rgba(63, 227, 160, 0); }
+}
+
+/* Naive lane destabilization after following injected instructions. */
+@keyframes vc-fracture {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  20%      { transform: translate(-1.5px, 0.5px) rotate(-0.2deg); }
+  40%      { transform: translate(1.5px, -0.5px) rotate(0.25deg); }
+  60%      { transform: translate(-1px, 0) rotate(-0.15deg); }
+  80%      { transform: translate(1px, 0.5px) rotate(0.1deg); }
+}
+
+.vc-destabilized {
+  animation: vc-fracture 0.45s ease-in-out 3;
+}
+
+/* Validation gate node while checking. */
+@keyframes vc-gate-check {
+  0%, 100% { opacity: 0.4; }
+  50%      { opacity: 1; }
+}
+
+.vc-animate-in {
+  animation: vc-fade-in 0.4s ease-out both;
+}
+
+.vc-animate-slide-up {
+  animation: vc-slide-up 0.5s ease-out both;
+}
+
+/* ── Ambient grid (hero only, warm, static) ──────────────── */
+
+.vc-grid-backdrop {
+  background-image:
+    linear-gradient(to right, rgba(203, 191, 166, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(203, 191, 166, 0.035) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+/* ── Status chip ─────────────────────────────────────────── */
+
+.vc-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+.vc-badge-green {
+  background: var(--vc-green-bg);
+  border: 1px solid var(--vc-green-border);
+  color: var(--vc-green);
+}
+
+.vc-badge-cyan {
+  background: var(--vc-cyan-bg);
+  border: 1px solid var(--vc-cyan-border);
+  color: var(--vc-cyan);
+}
+
+.vc-badge-amber {
+  background: var(--vc-amber-bg);
+  border: 1px solid var(--vc-amber-border);
+  color: var(--vc-amber);
+}
+
+.vc-badge-red {
+  background: var(--vc-red-bg);
+  border: 1px solid var(--vc-red-border);
+  color: var(--vc-red);
+}
+
+.vc-badge-slate {
+  background: var(--vc-slate-bg);
+  border: 1px solid var(--vc-slate-border);
+  color: var(--vc-slate);
+}
+
+/* ── Evidence (mono is earned here) ──────────────────────── */
+
+.vc-evidence-highlight {
+  background: rgba(240, 182, 68, 0.09);
+  border-left: 2px solid var(--vc-amber);
+  padding: 8px 12px;
+  border-radius: 0 var(--vc-radius-sm) var(--vc-radius-sm) 0;
+  font-family: var(--font-jetbrains), 'Menlo', 'Consolas', monospace;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--vc-text-muted);
+  word-break: break-word;
+}
+
+.vc-injection-marker {
+  background: rgba(240, 106, 80, 0.1);
+  border: 1px dashed var(--vc-red-border);
+  color: var(--vc-red);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: var(--font-jetbrains), 'Menlo', 'Consolas', monospace;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* Untrusted containment frame — steel, dashed, deliberate. */
+.vc-containment {
+  border: 1px dashed var(--vc-slate-border);
+  background: var(--vc-slate-bg);
+  border-radius: var(--vc-radius);
+}
+
+/* ── Reduced motion ──────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .vc-animate-in,
+  .vc-animate-slide-up,
+  .vc-destabilized {
+    animation: none !important;
+  }
+  .vc-motion-decor,
+  .vc-motion-decor * {
+    animation: none !important;
+  }
+  * {
+    scroll-behavior: auto !important;
+  }
+}
