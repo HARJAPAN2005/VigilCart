@@ -15,13 +15,13 @@ type CompileState = 'idle' | 'loading' | 'success' | 'fixture';
 interface IntentConsoleProps {
   defaultText: string;
   onCompile: (text: string) => void;
-  onGeminiCompile?: (intent: IntentContract) => void;
+  onOpenAICompile?: (intent: IntentContract) => void;
 }
 
 export default function IntentConsole({
   defaultText,
   onCompile,
-  onGeminiCompile,
+  onOpenAICompile,
 }: IntentConsoleProps) {
   const [text, setText] = useState(defaultText);
   const [isFocused, setIsFocused] = useState(false);
@@ -34,7 +34,7 @@ export default function IntentConsole({
     }
   }, [text, onCompile]);
 
-  const handleGeminiCompile = useCallback(async () => {
+  const handleOpenAICompile = useCallback(async () => {
     if (text.trim().length === 0) return;
 
     setCompileState('loading');
@@ -48,21 +48,21 @@ export default function IntentConsole({
       const data = await res.json();
 
       if (data.fixtureMode || !data.intent) {
-        // Gemini unavailable or returned invalid data — fall back to fixture
+        // OpenAI unavailable or returned invalid data — fall back to fixture
         setCompileState('fixture');
         onCompile(text.trim());
         return;
       }
 
       setCompileState('success');
-      if (onGeminiCompile) {
-        onGeminiCompile(data.intent as IntentContract);
+      if (onOpenAICompile) {
+        onOpenAICompile(data.intent as IntentContract);
       }
     } catch {
       setCompileState('fixture');
       onCompile(text.trim());
     }
-  }, [text, onCompile, onGeminiCompile]);
+  }, [text, onCompile, onOpenAICompile]);
 
   const hasText = text.trim().length > 0;
 
@@ -114,8 +114,8 @@ export default function IntentConsole({
 
           <div className="flex items-center gap-2.5">
             <button
-              id="gemini-compile-btn"
-              onClick={handleGeminiCompile}
+              id="openai-compile-btn"
+              onClick={handleOpenAICompile}
               disabled={!hasText || compileState === 'loading'}
               className="vc-focusable flex min-h-11 items-center gap-2 rounded-card border px-4 text-[12.5px] font-medium transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-30"
               style={{
@@ -129,7 +129,7 @@ export default function IntentConsole({
               ) : (
                 <Cpu size={13} strokeWidth={2} />
               )}
-              {compileState === 'loading' ? 'Compiling…' : 'Compile with Gemini'}
+              {compileState === 'loading' ? 'Compiling…' : 'Compile with OpenAI'}
             </button>
 
             <button
@@ -162,7 +162,7 @@ function CompileStateBadge({ state }: { state: CompileState }) {
       return (
         <span className="vc-badge vc-badge-green">
           <CheckCircle2 size={10} strokeWidth={2} />
-          Gemini
+          OpenAI
         </span>
       );
     case 'fixture':

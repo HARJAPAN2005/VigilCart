@@ -1,22 +1,22 @@
 /**
  * POST /api/explain-run
  *
- * Uses Gemini 2.5 Flash to generate a concise explanation of a deterministic
+ * Uses OpenAI (gpt-4.1-mini) to generate a concise explanation of a deterministic
  * guard evaluation.  The deterministic result is returned as authoritative;
- * Gemini observations are supplementary only.
+ * OpenAI observations are supplementary only.
  *
- * Server-side only — GEMINI_API_KEY is never sent to the client.
+ * Server-side only — OPENAI_API_KEY is never sent to the client.
  */
 
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import {
-  explainRunWithGemini,
-  isGeminiAvailable,
-  GeminiUnavailableError,
-} from '../../../lib/gemini';
+  explainRunWithOpenAI,
+  isOpenAIAvailable,
+  OpenAIUnavailableError,
+} from '../../../lib/openai';
 
-// Zod schema for the Gemini explain-run response
+// Zod schema for the OpenAI explain-run response
 const MerchantFlagSchema = z.object({
   merchantId: z.string(),
   untrustedContentFlags: z.array(z.string()),
@@ -53,20 +53,20 @@ export async function POST(request: Request) {
     }
 
     // If no API key, signal fixture mode
-    if (!isGeminiAvailable()) {
+    if (!isOpenAIAvailable()) {
       return NextResponse.json(
         { error: 'fixture_mode', fixtureMode: true },
         { status: 200 }
       );
     }
 
-    // Call Gemini
-    const raw = await explainRunWithGemini(reqParsed.data);
+    // Call OpenAI
+    const raw = await explainRunWithOpenAI(reqParsed.data);
 
     // Validate with Zod
     const parsed = ExplainRunResponseSchema.safeParse(raw);
     if (!parsed.success) {
-      // Invalid response → fixture mode, never expose raw Gemini output
+      // Invalid response → fixture mode, never expose raw OpenAI output
       return NextResponse.json(
         { error: 'fixture_mode', fixtureMode: true },
         { status: 200 }
@@ -79,15 +79,15 @@ export async function POST(request: Request) {
       // Pass back the deterministic guard result as-is — it's authoritative
       guardResult: reqParsed.data.guardResult,
       fixtureMode: false,
-      source: 'gemini',
+      source: 'openai',
     });
   } catch (err) {
-    const isGeminiErr = err instanceof GeminiUnavailableError;
+    const isOpenAIErr = err instanceof OpenAIUnavailableError;
     return NextResponse.json(
       {
         error: 'fixture_mode',
         fixtureMode: true,
-        reason: isGeminiErr ? 'gemini_unavailable' : 'unexpected_error',
+        reason: isOpenAIErr ? 'openai_unavailable' : 'unexpected_error',
       },
       { status: 200 }
     );

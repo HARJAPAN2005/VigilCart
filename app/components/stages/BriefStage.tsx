@@ -23,7 +23,7 @@ export default function BriefStage() {
     activeMerchants,
     activeScenario,
     compileFixture,
-    compileGemini,
+    compileOpenAI,
     openEvidence,
     setAct,
   } = useWorkspace();
@@ -58,11 +58,11 @@ export default function BriefStage() {
     runSealSequence(activeScenario.intent, compileFixture);
   }, [runSealSequence, activeScenario, compileFixture]);
 
-  const handleGeminiCompile = useCallback(
-    (geminiIntent: IntentContract) => {
-      runSealSequence(geminiIntent, () => compileGemini(geminiIntent));
+  const handleOpenAICompile = useCallback(
+    (openAIIntent: IntentContract) => {
+      runSealSequence(openAIIntent, () => compileOpenAI(openAIIntent));
     },
-    [runSealSequence, compileGemini],
+    [runSealSequence, compileOpenAI],
   );
 
   return (
@@ -119,7 +119,7 @@ export default function BriefStage() {
                 <IntentConsole
                   defaultText={DEFAULT_TEXT}
                   onCompile={handleFixtureCompile}
-                  onGeminiCompile={handleGeminiCompile}
+                  onOpenAICompile={handleOpenAICompile}
                 />
               </div>
 
@@ -147,7 +147,7 @@ export default function BriefStage() {
               <IntentConsole
                 defaultText={DEFAULT_TEXT}
                 onCompile={handleFixtureCompile}
-                onGeminiCompile={handleGeminiCompile}
+                onOpenAICompile={handleOpenAICompile}
               />
             </motion.div>
 

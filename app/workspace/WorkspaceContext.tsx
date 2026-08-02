@@ -85,7 +85,7 @@ export const SCENARIOS: Record<ScenarioId, ScenarioDef> = {
 export interface WorkspaceState {
   scenario: ScenarioId;
   intent: IntentContract | null;
-  intentSource: 'fixture' | 'gemini';
+  intentSource: 'fixture' | 'openai';
   compiled: boolean;
   reports: FidelityReport[];
   /** Merchant ids the USER has explicitly approved for simulated checkout. */
@@ -97,7 +97,7 @@ export interface WorkspaceState {
 
 type Action =
   | { type: 'COMPILE_FIXTURE' }
-  | { type: 'COMPILE_GEMINI'; intent: IntentContract }
+  | { type: 'COMPILE_OPENAI'; intent: IntentContract }
   | { type: 'SWITCH_SCENARIO'; scenario: ScenarioId }
   | { type: 'SET_ACT'; act: ActId }
   | { type: 'STEP_ACT'; dir: 1 | -1 }
@@ -151,12 +151,12 @@ function reducer(state: WorkspaceState, action: Action): WorkspaceState {
         activeAct: 'brief',
       };
     }
-    case 'COMPILE_GEMINI': {
+    case 'COMPILE_OPENAI': {
       const s = SCENARIOS[state.scenario];
       return {
         ...state,
         intent: action.intent,
-        intentSource: 'gemini',
+        intentSource: 'openai',
         compiled: true,
         approvedIds: [],
         reports: computeReports(action.intent, s.merchants, []),
@@ -221,7 +221,7 @@ export interface WorkspaceValue extends WorkspaceState {
   /** Scenario metadata for the currently selected scenario. */
   activeScenario: ScenarioDef;
   compileFixture: () => void;
-  compileGemini: (intent: IntentContract) => void;
+  compileOpenAI: (intent: IntentContract) => void;
   switchScenario: (scenario: ScenarioId) => void;
   setAct: (act: ActId) => void;
   stepAct: (dir: 1 | -1) => void;
@@ -237,8 +237,8 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const compileFixture = useCallback(() => dispatch({ type: 'COMPILE_FIXTURE' }), []);
-  const compileGemini = useCallback(
-    (intent: IntentContract) => dispatch({ type: 'COMPILE_GEMINI', intent }),
+  const compileOpenAI = useCallback(
+    (intent: IntentContract) => dispatch({ type: 'COMPILE_OPENAI', intent }),
     [],
   );
   const switchScenario = useCallback(
@@ -265,7 +265,7 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       activeMerchants: SCENARIOS[state.scenario].merchants,
       activeScenario: SCENARIOS[state.scenario],
       compileFixture,
-      compileGemini,
+      compileOpenAI,
       switchScenario,
       setAct,
       stepAct,
@@ -277,7 +277,7 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     [
       state,
       compileFixture,
-      compileGemini,
+      compileOpenAI,
       switchScenario,
       setAct,
       stepAct,

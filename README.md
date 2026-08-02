@@ -2,9 +2,22 @@
 
 **Before an AI shopping agent spends your money, VigilCart proves whether it actually kept your promises — in a fully simulated, no-payment lab.**
 
-> Live demo:- **https://vigil-cart.vercel.app/**
+![Next.js](https://img.shields.io/badge/Next.js_16-black?style=flat-square&logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178c6?style=flat-square&logo=typescript&logoColor=white)
+![OpenAI](https://img.shields.io/badge/OpenAI-412991?style=flat-square&logo=openai&logoColor=white)
+![Zod](https://img.shields.io/badge/Zod-3E67B1?style=flat-square&logo=zod&logoColor=white)
 
-> Video demo :- **https://youtu.be/U4UBEM4XTOs**
+> Live demo: **`https://<your-vercel-app>.vercel.app`** _(replace after deployment — see [Deployment](#deployment))_
+
+---
+
+## ⚠️ AI Usage Declaration
+
+**Built for the ChatGPT Codex Hackathon 2026 — Agentic Coding track.**
+
+- **Runtime model:** `gpt-4.1-mini` parses natural-language intent and explains guard verdicts. It is explicitly untrusted: its output must pass Zod validation before use, and it has no path to influence `runGuard()`, `computeScore()`, or the approval gate.
+- **Build process:** Scaffolded and iterated with AI-assisted coding; deterministic guard, injection detector, scoring, and the self-verifying `/api/verify` endpoint were written and reviewed under human direction.
+- **Everything else is deterministic.** Budget math, arrival-date comparison, returnability checks, the injection heuristic, and the approval gate run in plain TypeScript that never calls a model.
 
 ---
 
@@ -26,7 +39,7 @@ It is **not** a shopping assistant, a payment product, a browser-automation tool
 
 VigilCart walks a judge or user through four acts, all driven by a single deterministic state store:
 
-1. **The Brief** — You state an intent in plain language (*"Black carry-on under ₹4,000 all-in, returnable, arrives before 22 July, never buy without my approval."*). It compiles into a typed **Intent Contract** — enforceable rules for budget, deadline, returnability, and approval. Parsing can use Gemini, but falls back to fixtures with no API key.
+1. **The Brief** — You state an intent in plain language (*"Black carry-on under ₹4,000 all-in, returnable, arrives before 22 July, never buy without my approval."*). It compiles into a typed **Intent Contract** — enforceable rules for budget, deadline, returnability, and approval. Parsing can use OpenAI, but falls back to fixtures with no API key.
 2. **The Arena** — The same intent and the same merchants are handed to two agents. The **naïve** agent trusts everything it reads; the **guarded** agent treats every merchant claim as untrusted until deterministic code proves it. One merchant hides a prompt injection. Watch them diverge.
 3. **The Attack Lab** — You become the attacker. Rewrite a merchant review, hide an instruction inside it (or load a preset attack), and rerun. The naïve agent gets manipulated; the guarded agent's verdict does not move — *"Your edit had zero effect on the outcome."*
 4. **The Verdict** — A deterministic **Autonomy Score (0–100)** with a breakdown: rule compliance, evidence quality, injection resistance, approval discipline. Checkout stays **locked** behind explicit human approval. The strongest state the app can reach is *"simulated checkout may proceed. No purchase is executed."*
@@ -38,9 +51,9 @@ The core safety property is a strict separation: **the LLM observes and explains
 ```mermaid
 flowchart TD
     User["User intent<br/>(natural language)"] --> API["/api/compile-intent<br/>(server-only)"]
-    API -->|GEMINI_API_KEY set| Gemini["Gemini 2.5 Flash<br/>parse intent → JSON"]
+    API -->|OPENAI_API_KEY set| OpenAI["OpenAI gpt-4.1-mini<br/>parse intent → JSON"]
     API -->|no key / error / invalid| Fixture["Fixture fallback"]
-    Gemini --> Zod["Zod validation<br/>IntentContract"]
+    OpenAI --> Zod["Zod validation<br/>IntentContract"]
     Fixture --> Zod
 
     Zod --> Contract["Intent Contract<br/>budget · deadline · returnable · approval"]
@@ -59,16 +72,16 @@ flowchart TD
     Score --> Report["Fidelity Report<br/>eligible · approved · score · reasons"]
     Report --> UI["UI: Arena · Attack Lab · Verdict"]
 
-    Report -.->|read-only context| Explain["/api/explain-run<br/>Gemini explanation (observations only)"]
+    Report -.->|read-only context| Explain["/api/explain-run<br/>OpenAI explanation (observations only)"]
     Explain -.->|never alters verdict| UI
 
     classDef untrusted fill:#3a1a12,stroke:#f06a50,color:#f5d9d0;
     classDef trusted fill:#12261a,stroke:#3ecf8e,color:#d6f5e6;
-    class Merchants,Gemini,Explain untrusted;
+    class Merchants,OpenAI,Explain untrusted;
     class Guard,Detect,Score,Report trusted;
 ```
 
-**Stack:** Next.js 16 (App Router, Turbopack) · React 19 · TypeScript · Tailwind CSS 4 · Zod · `@google/genai` (server-only) · Motion. No database, no auth, no payment SDK.
+**Stack:** Next.js 16 (App Router, Turbopack) · React 19 · TypeScript · Tailwind CSS 4 · Zod · `openai` (server-only) · Motion. No database, no auth, no payment SDK.
 
 Key modules:
 
@@ -78,39 +91,18 @@ Key modules:
 | [`lib/injection-detector.ts`](lib/injection-detector.ts) | Deterministic regex scan for injection patterns. |
 | [`lib/scoring.ts`](lib/scoring.ts) | Autonomy Score with safety caps. |
 | [`lib/schemas.ts`](lib/schemas.ts) | Zod contracts for intent, offers, checks, reports. |
-| [`lib/gemini.ts`](lib/gemini.ts) | Server-only Gemini client. Parses/explains — never decides. |
+| [`lib/openai.ts`](lib/openai.ts) | Server-only OpenAI client. Parses/explains — never decides. |
 | [`data/*.ts`](data/) | Untrusted merchant fixtures for each scenario. |
 | [`app/api/verify`](app/api/verify/route.ts) | Self-check that asserts every scenario's expected verdict. |
 
 ## Screenshots
 
-### 🏁 Agent Arena
+_Placeholder images — capture from the running app and drop into `docs/screenshots/`._
 
-The guarded agent and naïve agent race side-by-side against the same marketplace.
+| The Arena | The Attack Lab | The Verdict |
+| --- | --- | --- |
+| ![Arena — naïve vs guarded race](docs/screenshots/arena.png) | ![Attack Lab — edit a review, rerun](docs/screenshots/attack-lab.png) | ![Verdict — autonomy score & approval gate](docs/screenshots/verdict.png) |
 
-<p align="center">
-  <img src="docs/screenshots/arena.png" width="100%" alt="Agent Arena">
-</p>
-
----
-
-### ⚠️ Live Attack Lab
-
-Inject prompt-injection attacks into merchant content and observe how each agent responds.
-
-<p align="center">
-  <img src="docs/screenshots/attack-lab.png" width="100%" alt="Attack Lab">
-</p>
-
----
-
-### ✅ Verdict
-
-A deterministic evaluation of intent fidelity, autonomy score, and approval gating.
-
-<p align="center">
-  <img src="docs/screenshots/verdict.png" width="100%" alt="Verdict">
-</p>
 ## Scenarios
 
 Two selectable scenarios; the Arena always replays the flagship injection race.
@@ -124,11 +116,11 @@ Each fixture merchant is defined in [`data/default-scenario.ts`](data/default-sc
 
 ## Security model
 
-1. **Merchant content is untrusted data, never instructions.** Every merchant snippet, review, description, and hidden string is treated as adversarial input. The guarded flow labels it as such; the Gemini prompt is explicitly told merchant content is untrusted and must never be followed.
+1. **Merchant content is untrusted data, never instructions.** Every merchant snippet, review, description, and hidden string is treated as adversarial input. The guarded flow labels it as such; the OpenAI prompt is explicitly told merchant content is untrusted and must never be followed.
 2. **The deterministic guard owns the final verdict.** Budget, arrival, returnability, injection, and approval are decided by plain TypeScript in [`lib/deterministic-guard.ts`](lib/deterministic-guard.ts). No LLM output can flip a result.
 3. **Evidence is required, never assumed.** A hard rule cannot pass on absent evidence — e.g. an arrival date with no cited shipping snippet fails, rather than being given the benefit of the doubt.
 4. **Approval is explicit and human-only.** The `approved` flag is only ever set by a user action. The LLM cannot grant it, and checkout is gated on it regardless of how good an offer looks.
-5. **Secrets stay on the server.** `GEMINI_API_KEY` is read only in server-side API routes, never shipped to the client, never exposed via a `NEXT_PUBLIC_` prefix, and never included in error messages or any downloadable output. With no key, the app runs fully in fixture mode.
+5. **Secrets stay on the server.** `OPENAI_API_KEY` is read only in server-side API routes, never shipped to the client, never exposed via a `NEXT_PUBLIC_` prefix, and never included in error messages or any downloadable output. With no key, the app runs fully in fixture mode.
 6. **No completed-purchase state exists.** There is no code path that renders "order placed" / "purchase complete." The strongest UI state is *"simulated checkout may proceed. No purchase is executed."*
 
 Full attacker analysis: [THREAT_MODEL.md](THREAT_MODEL.md).
@@ -148,10 +140,10 @@ git clone https://github.com/HARJAPAN2005/VigilCart.git
 cd VigilCart
 npm install
 
-# Optional: enable Gemini-powered intent parsing.
+# Optional: enable OpenAI-powered intent parsing.
 # The app is fully functional without this — it runs in fixture mode.
 cp .env.example .env.local
-# then edit .env.local and set GEMINI_API_KEY=...
+# then edit .env.local and set OPENAI_API_KEY=...
 
 npm run dev      # http://localhost:3000
 npm run lint
@@ -164,7 +156,7 @@ On Windows PowerShell, invoke `cmd /c npm run lint` and `cmd /c npm run build` s
 
 | Variable | Required | Scope | Purpose |
 | --- | --- | --- | --- |
-| `GEMINI_API_KEY` | No | Server-only | Enables Gemini 2.5 Flash intent parsing and run explanations. Absent → fixture mode (all evaluation logic still works). |
+| `OPENAI_API_KEY` | No | Server-only | Enables OpenAI (gpt-4.1-mini) intent parsing and run explanations. Absent → fixture mode (all evaluation logic still works). |
 
 There are no other environment variables. No database URL, no auth secret, no payment keys.
 
@@ -175,7 +167,7 @@ There are no other environment variables. No database URL, no auth secret, no pa
 
 ## Deployment
 
-VigilCart is a stock Next.js app and deploys to Vercel with zero configuration. `GEMINI_API_KEY` is optional; set it as a **server-side** environment variable in the Vercel project if you want live intent parsing. See the deployment section of the audit report or run:
+VigilCart is a stock Next.js app and deploys to Vercel with zero configuration. `OPENAI_API_KEY` is optional; set it as a **server-side** environment variable in the Vercel project if you want live intent parsing. See the deployment section of the audit report or run:
 
 ```bash
 npm i -g vercel
@@ -192,3 +184,16 @@ Do **not** prefix the key with `NEXT_PUBLIC_`. Never commit `.env.local`.
 - [LIMITATIONS.md](LIMITATIONS.md) — honest scope boundaries
 - [docs/deck.md](docs/deck.md) — six-slide pitch
 - [docs/demo-script.md](docs/demo-script.md) — timed three-minute demo
+
+## 🏆 Judging Criteria Map
+
+| Criterion | Our Answer |
+|---|---|
+| **Innovation** | First adversarial *evaluation lab* for agentic commerce — not a shopping assistant, a red-team harness that races a naïve vs. guarded agent through the same hostile merchant data and produces a defensible, evidence-backed score. |
+| **Technical Execution** | Deterministic guard owns every pass/block/score decision; model output is Zod-validated and structurally incapable of altering a verdict; self-verifying `/api/verify` endpoint; zero-API-key fixture mode; full TypeScript + tests. |
+| **Real-World Applicability** | Directly targets the live ACP/AP2 agentic-commerce standards gap — "who may pay" is being solved industry-wide, "should the agent have acted at all" is not. Applicable to AI-agent teams, marketplaces, and fintech trust & safety today. |
+| **Effective Use of Codex** | Built and iterated with AI-assisted coding end-to-end. Runtime intent parsing and guard-run explanations are powered by OpenAI (`gpt-4.1-mini`), with Zod validation ensuring model output is structurally incapable of influencing verdicts. |
+
+## License
+
+MIT

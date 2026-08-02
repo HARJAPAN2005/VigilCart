@@ -46,8 +46,8 @@ export default function AppShell() {
               <span className="vc-badge vc-badge-amber sm:hidden">Simulated</span>
               {compiled && (
                 <>
-                  {intentSource === 'gemini' ? (
-                    <span className="vc-badge vc-badge-green">Gemini active</span>
+                  {intentSource === 'openai' ? (
+                    <span className="vc-badge vc-badge-green">OpenAI active</span>
                   ) : (
                     <span className="vc-badge vc-badge-slate">Fixture mode</span>
                   )}

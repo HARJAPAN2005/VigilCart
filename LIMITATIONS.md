@@ -37,7 +37,7 @@ The guard confirms that a claim is cited and that citations do not contradict ea
 Fixtures, prompts, and detection phrasing assume English text and Indian Rupee (₹) budgets. Other languages, currencies, tax regimes, and locale-specific policy wording are not handled.
 
 ### LLM parsing is best-effort and optional
-When `GEMINI_API_KEY` is set, intent parsing depends on Gemini 2.5 Flash, which can misread ambiguous requests. Parsed intent is validated by Zod and falls back to fixtures on any failure, but the lab does not attempt to guarantee correct interpretation of arbitrary natural language. The model never affects verdicts either way.
+When `OPENAI_API_KEY` is set, intent parsing depends on OpenAI (gpt-4.1-mini), which can misread ambiguous requests. Parsed intent is validated by Zod and falls back to fixtures on any failure, but the lab does not attempt to guarantee correct interpretation of arbitrary natural language. The model never affects verdicts either way.
 
 ## What VigilCart *does* claim
 

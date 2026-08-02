@@ -2,7 +2,7 @@
 
 A timed, judge-facing walkthrough. Total: **3:00**. Times are cumulative. Everything works with **no API key** (fixture mode) — nothing here spends money or touches a real site.
 
-**Before you start:** `npm run dev`, open `http://localhost:3000`, and make sure the header reads *Fixture mode* (or *Gemini active* if you set a key). Start on **The Brief**.
+**Before you start:** `npm run dev`, open `http://localhost:3000`, and make sure the header reads *Fixture mode* (or *OpenAI active* if you set a key). Start on **The Brief**.
 
 ---
 
@@ -56,7 +56,7 @@ Point at the locked checkout.
 ---
 
 ### Backup Q&A one-liners
-- **"Does it need an API key?"** No — everything you saw runs in fixture mode. Gemini only parses English into the contract; it never touches a verdict.
+- **"Does it need an API key?"** No — everything you saw runs in fixture mode. OpenAI only parses English into the contract; it never touches a verdict.
 - **"Is the guard really unbypassable?"** The verdict is computed by `runGuard()` on typed fields, never on merchant text. That's why the Attack Lab edit changes nothing. See [THREAT_MODEL.md](../THREAT_MODEL.md).
 - **"What are the limits?"** Simulated merchants, no live browsing, no payments, not a security certification. We're explicit about it in [LIMITATIONS.md](../LIMITATIONS.md).
 - **"Verify it yourself:"** hit `/api/verify` — it runs all four fixtures through the real guard and returns `ALL PASS`.
